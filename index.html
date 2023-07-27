@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banking App</title>
+</head>
+<body>
+  <h1>Patate industries</h1>
+
+  <script>
+   class LoginPage {
+  constructor(master, on_login) {
+    this.master = master;
+    this.on_login = on_login;
+
+    this.username_label = document.createElement('label');
+    this.username_label.textContent = "Nom d'utilisateur:";
+    this.master.appendChild(this.username_label);
+
+    this.username_entry = document.createElement('input');
+    this.username_entry.type = "text";
+    this.master.appendChild(this.username_entry);
+
+    this.password_label = document.createElement('label');
+    this.password_label.textContent = "Mot de passe:";
+    this.master.appendChild(this.password_label);
+
+    this.password_entry = document.createElement('input');
+    this.password_entry.type = "password";
+    this.master.appendChild(this.password_entry);
+
+    this.login_button = document.createElement('button');
+    this.login_button.textContent = "Se connecter";
+    this.login_button.addEventListener('click', () => this.login());
+    this.master.appendChild(this.login_button);
+  }
+
+  login() {
+    const username = this.username_entry.value;
+    const password = this.password_entry.value;
+
+    if (username === "admin" && password === "admin123") {
+      this.on_login(true);
+    } else if (username === "Patate" && password === "patate") {
+      this.on_login(false);
+    } else if (username === "Totor" && password === "totor") {
+      this.on_login(false);
+    } else {
+      alert("Erreur de connexion\nNom d'utilisateur ou mot de passe incorrect");
+    }
+  }
+}
+
+
+    class BankAccountPage {
+  constructor(master, admin = false) {
+    this.master = master;
+    this.admin = admin;
+
+    this.balance = 0;
+    this.historique = [];
+
+    this.balance_label = document.createElement('label');
+    this.balance_label.textContent = "Solde bancaire: $0";
+    this.master.appendChild(this.balance_label);
+
+    this.historique_label = document.createElement('label');
+    this.historique_label.textContent = "Historique des achats:";
+    this.master.appendChild(this.historique_label);
+
+    this.historique_listbox = document.createElement('select');
+    this.historique_listbox.size = 5;
+    this.master.appendChild(this.historique_listbox);
+
+    this.buy_supercar_button = document.createElement('button');
+    this.buy_supercar_button.textContent = "Acheter une supercar ($500,000)";
+    this.buy_supercar_button.addEventListener('click', () => this.buy_supercar());
+    this.master.appendChild(this.buy_supercar_button);
+
+    this.buy_hypercar_button = document.createElement('button');
+    this.buy_hypercar_button.textContent = "Acheter une hypercar ($1,000,000)";
+    this.buy_hypercar_button.addEventListener('click', () => this.buy_hypercar());
+    this.master.appendChild(this.buy_hypercar_button);
+
+    this.buy_villa_button = document.createElement('button');
+    this.buy_villa_button.textContent = "Acheter une villa ($5,000,000)";
+    this.buy_villa_button.addEventListener('click', () => this.buy_villa());
+    this.master.appendChild(this.buy_villa_button);
+
+    this.buy_cargo_plane_button = document.createElement('button');
+    this.buy_cargo_plane_button.textContent = "Acheter un avion cargo ($10,000,000)";
+    this.buy_cargo_plane_button.addEventListener('click', () => this.buy_cargo_plane());
+    this.master.appendChild(this.buy_cargo_plane_button);
+
+    this.buy_tank_button = document.createElement('button');
+    this.buy_tank_button.textContent = "Acheter un tank ($15,000,000)";
+    this.buy_tank_button.addEventListener('click', () => this.buy_tank());
+    this.master.appendChild(this.buy_tank_button);
+    
+    this.buy_private_jet_button = document.createElement('button');
+    this.buy_private_jet_button.textContent = "Acheter un jet privé ($20,000,000)";
+    this.buy_private_jet_button.addEventListener('click', () => this.buy_private_jet());
+    this.master.appendChild(this.buy_private_jet_button);
+
+    this.buy_rocket_button = document.createElement('button');
+    this.buy_rocket_button.textContent = "Acheter une fusée ($1,000,000,000)";
+    this.buy_rocket_button.addEventListener('click', () => this.buy_rocket());
+    this.master.appendChild(this.buy_rocket_button);
+
+    if (this.admin) {
+      this.add_money_button = document.createElement('button');
+      this.add_money_button.textContent = "Ajouter de l'argent";
+      this.add_money_button.addEventListener('click', () => this.add_money());
+      this.master.appendChild(this.add_money_button);
+    }
+
+    this.logout_button = document.createElement('button');
+    this.logout_button.textContent = "Déconnexion";
+    this.logout_button.addEventListener('click', () => this.logout());
+    this.master.appendChild(this.logout_button);
+
+    this.update_balance_label();
+    this.update_historique_listbox();
+  }
+
+  update_balance_label() {
+    this.balance_label.textContent = "Solde bancaire: $" + this.balance;
+  }
+
+  update_historique_listbox() {
+    this.historique_listbox.innerHTML = "";
+    for (const item of this.historique) {
+      const option = document.createElement('option');
+      option.textContent = item;
+      this.historique_listbox.appendChild(option);
+    }
+  }
+
+  add_money() {
+    const amount = prompt("Montant à ajouter:");
+    if (amount !== null) {
+      const parsedAmount = parseInt(amount);
+      if (!isNaN(parsedAmount)) {
+        this.balance += parsedAmount;
+        this.update_balance_label();
+        this.historique.push("Ajout d'argent: +$" + parsedAmount);
+        this.update_historique_listbox();
+        alert("Ajout d'argent\nLe montant de $" + parsedAmount + " a été ajouté au solde bancaire.");
+      } else {
+        alert("Erreur de saisie\nVeuillez entrer un nombre entier valide.");
+      }
+    }
+  }
+
+  buy_item(item_name, price) {
+    if (this.balance >= price) {
+      this.balance -= price;
+      this.update_balance_label();
+      this.historique.push("Achat: " + item_name + " ($" + price + ")");
+      this.update_historique_listbox();
+      alert("Achat\nVous avez acheté un(e) " + item_name + " pour $" + price + ".");
+    } else {
+      alert("Solde insuffisant\nSolde bancaire insuffisant pour effectuer l'achat.");
+    }
+  }
+
+  buy_supercar() {
+    this.buy_item("supercar", 500000);
+  }
+
+  buy_hypercar() {
+    this.buy_item("hypercar", 1000000);
+  }
+
+  buy_villa() {
+    this.buy_item("villa", 5000000);
+  }
+
+  buy_cargo_plane() {
+    this.buy_item("avion cargo", 10000000);
+  }
+  
+  buy_tank() {
+    this.buy_item("tank", 15000000);
+  }
+
+
+
+  buy_private_jet() {
+    this.buy_item("jet privé", 20000000);
+  }
+
+  buy_rocket() {
+    this.buy_item("fusée", 1000000000);
+  }
+
+  logout() {
+    this.master.switch_page(LoginPage);
+  }
+}
+   class CustomDialog {
+  constructor(parent, title, prompt) {
+    this.parent = parent;
+
+    this.dialog = document.createElement('div');
+    this.dialog.style.border = "1px solid black";
+    this.dialog.style.padding = "10px";
+    this.parent.appendChild(this.dialog);
+
+    this.prompt_label = document.createElement('label');
+    this.prompt_label.textContent = prompt;
+    this.dialog.appendChild(this.prompt_label);
+
+    this.entry = document.createElement('input');
+    this.entry.type = "text";
+    this.dialog.appendChild(this.entry);
+
+    this.ok_button = document.createElement('button');
+    this.ok_button.textContent = "OK";
+    this.ok_button.addEventListener('click', () => this.ok());
+    this.dialog.appendChild(this.ok_button);
+
+    this.result = null;
+  }
+
+  ok() {
+    const amount = parseInt(this.entry.value);
+    if (!isNaN(amount)) {
+      this.result = amount;
+      this.dialog.remove();
+    } else {
+      alert("Erreur de saisie\nVeuillez entrer un nombre entier valide.");
+    }
+  }
+}
+    class Application {
+      constructor() {
+        this.master = document.body;
+
+        this.title_label = document.createElement('h1');
+        this.title_label.textContent = "Patate industries";
+        this.master.appendChild(this.title_label);
+
+        this.pages = {};
+
+        this.switch_page(LoginPage);
+
+        this.current_user = null;
+
+        // Load the history from the browser's local storage (if available)
+        const savedHistory = localStorage.getItem("history");
+        if (savedHistory) {
+          this.history = JSON.parse(savedHistory);
+        } else {
+          this.history = [];
+        }
+
+        // Add the buy_custom_object method to the BankAccountPage instance
+        const bankAccountPage = this.pages[BankAccountPage];
+        bankAccountPage.buy_custom_object = function() {
+          this.buy_item("objet personnalisé", 15000000);
+        };
+
+        // Update the history when an item is bought
+        bankAccountPage.buy_item = function(item_name, price) {
+          if (this.balance >= price) {
+            this.balance -= price;
+            this.update_balance_label();
+            const purchaseMessage = "Achat: " + item_name + " ($" + price + ")";
+            this.historique.push(purchaseMessage);
+            this.update_historique_listbox();
+
+            // Add the purchase to the history in the application and save to local storage
+            app.history.push(purchaseMessage);
+            localStorage.setItem("history", JSON.stringify(app.history));
+
+            alert("Achat\nVous avez acheté un(e) " + item_name + " pour $" + price + ".");
+          } else {
+            alert("Solde insuffisant\nSolde bancaire insuffisant pour effectuer l'achat.");
+          }
+        };
+      }
+
+      switch_page(page_class) {
+    if (this.current_user) {
+      this.current_user.master.removeChild(this.current_user);
+      this.current_user = null;
+    }
+
+    let page = this.pages[page_class];
+    if (!page) {
+      page = new page_class(this.master, this.on_login.bind(this));
+      this.pages[page_class] = page;
+    }
+
+    this.master.appendChild(page);
+    this.current_user = page;
+  }
+
+        on_login(admin = false) {
+    this.switch_page(BankAccountPage);
+    this.current_user.admin = admin;
+    this.current_user.update_balance_label();
+    this.current_user.update_historique_listbox();
+  }
+}
+
+    const app = new Application();
+  </script>
+</body>
+</html>
